@@ -31,10 +31,13 @@ class App extends Component {
     };
     fetch("http://localhost:3001/api/v1/reservations", requestData)
       .then((resp) => resp.json())
+      .then((data) => console.log(data))
       .catch((err) => this.setState({ error: err.message }));
+    this.componentDidMount();
   };
 
   deleteRes = (event) => {
+    console.log(this.state.reservations);
     fetch(`http://localhost:3001/api/v1/reservations/${event.target.id}`, {
       method: "DELETE",
       headers: { "content-type": "application/json" },
@@ -42,6 +45,7 @@ class App extends Component {
       .then((resp) => resp.json())
       .then((data) => this.setState({ reservations: data }))
       .catch((err) => this.setState({ error: "Something went wrong" }));
+    console.log(this.state.reservations);
   };
   render() {
     console.log(this.state);
