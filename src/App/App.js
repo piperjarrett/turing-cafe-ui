@@ -1,19 +1,66 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import Reservations from "../Reservations/Reservations";
+import Form from "../Form/Form";
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <h1 className='app-title'>Turing Cafe Reservations</h1>
-        <div className='resy-form'>
+  constructor() {
+    super();
+    this.state = {
+      reservations: [],
+      error: "",
+    };
+  }
 
+  componentDidMount() {
+    fetch("http://localhost:3001/api/v1/reservations")
+      .then((resp) => resp.json())
+      .then((data) => this.setState({ reservations: data }))
+      .catch((err) => this.setState({ error: "Something went wrong" }));
+  }
+
+  addRes = (newRes) => {
+    this.setState({ reservations: [...this.state.reservations, newRes] });
+  };
+
+  postRes = (newRes) => {
+    const requestData = {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(newRes),
+    };
+    fetch("http://localhost:3001/api/v1/reservations", requestData)
+      .then((resp) => resp.json())
+      .catch((err) => this.setState({ error: err.message }));
+  };
+
+  deleteRes = (event) => {
+    fetch(`http://localhost:3001/api/v1/reservations/${event.target.id}`, {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+    })
+      .then((resp) => resp.json())
+      .then((data) => this.setState({ reservations: data }))
+      .catch((err) => this.setState({ error: "Something went wrong" }));
+  };
+  render() {
+    console.log(this.state);
+    return !this.state.reservations ? (
+      <h1>One moment....</h1>
+    ) : (
+      <div className="App">
+        <h1 className="app-title">Turing Cafe Reservations</h1>
+        <div className="resy-form">
+          <Form addRes={this.addRes} postRes={this.postRes} />
         </div>
-        <div className='resy-container'>
-          
+        <div className="resy-container">
+          <Reservations
+            reservations={this.state.reservations}
+            deleteRes={this.deleteRes}
+          />
         </div>
       </div>
-    )
+    );
   }
 }
 

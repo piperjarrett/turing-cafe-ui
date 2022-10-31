@@ -1,0 +1,16 @@
+.reserve {
+    background-color: teal;
+    color: white;
+    width: 12vw;
+    height: 6vh;
+}
+
+form {
+    display: flex;
+    justify-content: space-evenly
+}
+
+input {
+    width: 12vw;
+    height: 4vh;
+}
