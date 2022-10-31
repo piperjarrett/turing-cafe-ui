@@ -33,7 +33,6 @@ class App extends Component {
       .then((resp) => resp.json())
       .then((data) => console.log(data))
       .catch((err) => this.setState({ error: err.message }));
-    this.componentDidMount();
   };
 
   deleteRes = (event) => {
